@@ -56,22 +56,13 @@ def quantificar_geneticamente(**kwargs):
     
 
 if __name__ == "__main__":
-    # Leitura e verificacao dos argumentos de linha de comando
-    if len(sys.argv) < 5:
-        print("Modo de usar: python3 quantificar.py algoritmo argumento cores imagem\n"
-            + "algoritmo: nome do algoritmo a ser utilizado\n"
-            + "argumento: valor de 'k' para feixe local ou tamanho da populacao\n"
-            + "cores: quantidade de cores (número)\n"
-            + "imagem: caminho e nome do arquivo com a imagem a ser processada.") 
-        exit()
-        
-    
-    algoritmo = sys.argv[1]
-    argumento = int(sys.argv[2])
-    cores = int(sys.argv[3])
-    nome_arquivo = sys.argv[4]
 
-
+    print("Olá meu caro mansebo, vamos dar os argumentos para o funcionamento do nosso quantizador")
+    print("Digite o nome do algoritimo desejado")
+    algoritmo = input("SUBIDA | FEIXE | GENÉTICO").lower()
+    argumento = input("Digite o argumento que acompanha o algoritimo")
+    cores = int(input("Quantidade de cores"))
+    nome_arquivo = input("Caminho e nome do arquivo com a imagem a ser processada")
     # Define algoritmo a ser aplicado
     if algoritmo == "subida":
         algoritmo = quantificar_subida_encosta
@@ -84,25 +75,20 @@ if __name__ == "__main__":
         print("Algoritmos válidos são: {0}, {1}, {2}"
               .format("subida", "feixe", "genetico"))
         exit()
-        
-    
+    #Verifica o numero de cores
     if cores < 1:
         print("Quantidade de cores pós-quantizacão deve ser no mínimo 1.")
         exit()
-    
     # Abrir a imagem especificada
     try:
         original = Image.open(nome_arquivo)
     except IOError as err:
         print("Erro ao acessar arquivo: {0}".format(err))
-    
     # Copiar imagem para poder comparar ambas ao final.    
     reduzida = original.copy()
-    
     # Obtendo acesso aos pixels da cópia. Cada posicao é uma tupla (R, G, B)
     # R, G e B tem domínio em [0,255], ou seja, 0 <= x <= 255
     pixels = reduzida.load()
-
 
     algoritmo(argumento=argumento, cores=cores, pixels=pixels)
     
