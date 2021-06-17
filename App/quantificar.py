@@ -59,10 +59,10 @@ if __name__ == "__main__":
 
     print("Olá meu caro mansebo, vamos dar os argumentos para o funcionamento do nosso quantizador")
     print("Digite o nome do algoritimo desejado")
-    algoritmo = input("SUBIDA | FEIXE | GENÉTICO").lower()
-    argumento = input("Digite o argumento que acompanha o algoritimo")
-    cores = int(input("Quantidade de cores"))
-    nome_arquivo = input("Caminho e nome do arquivo com a imagem a ser processada")
+    algoritmo = input("SUBIDA | FEIXE | GENÉTICO" + '\n').lower()
+    argumento = input("Digite o argumento que acompanha o algoritimo" + '\n')
+    cores = int(input("Quantidade de cores"  + '\n'))
+    nome_arquivo = input("Caminho e nome do arquivo com a imagem a ser processada"  + '\n' )
     # Define algoritmo a ser aplicado
     if algoritmo == "subida":
         algoritmo = quantificar_subida_encosta
