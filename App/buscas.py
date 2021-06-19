@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import random
+
 """Módulo que abriga os algoritmos de quantificacao de imagens"""
 
 __author__ = "Nome do aluno"
@@ -38,6 +40,30 @@ def busca_genetica(populacao, fn_fitness):
     :param fn_fitness: funcao capaz de avaliar a qualidade de um individuo
     :return: um individuo com a funcao_fitness desejada
     """    
+
+
+    
+
+    for cont in range(30):
+
+        fitness = []
+        peso = []
+        for individuo in populacao:
+            fitness.append(fn_fitness(individuo))
+        
+        fitnessGeral = sum(fitness)
+        for fit in fitness:
+            peso.append( fitnessGeral/fit)
+
+        ng = random.choices(populacao, peso, k=len(populacao))
+
+        for i in range(0, len(ng), 2):
+            pos = random.randint(1, len(ng[i])-2)
+
+
+
+
+
     raise NotImplementedError
 
 if __name__ == "__main__":
