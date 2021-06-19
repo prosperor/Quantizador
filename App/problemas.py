@@ -1,20 +1,9 @@
 #!/usr/bin/env python3
 from scipy.spatial import distance
 import random
-"""Módulo com implementacao da modelagem do problema abordado"""
-
-__author__ = "Nome do aluno"
-__copyright__ = "Copyleft"
-__credits__ = ["Ricardo Inácio Álvares e Silva"]
-__license__ = "GPLv3"
-__version__ = "0.1"
-__maintainer__ = "Aluno"
-__email__ = "seu@email.com"
-__status__ = "Desenvolvimento"
 
 
 class ProblemaLocal():
-    """Classe abstrata com interfaces para implementacao de busca local"""
     
     def __init__(self, quantidadeCores, pixeis):
         self.paleta = self.gerarPaletaAleatoria(quantidadeCores)
@@ -34,7 +23,7 @@ class ProblemaLocal():
     @staticmethod
     def gerarPaletaAleatoria(quantidadeCores):
         paleta = []
-        for i in range(quantidadeCores):
+        for _ in range(quantidadeCores):
             paleta.append(tuple(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
 
     
@@ -56,7 +45,6 @@ class ProblemaLocal():
 class ProblemaQuantificacao(ProblemaLocal):
     """Aqui você implementará a modelagem da busca local em quantizacao de
     imagens"""
-
     
     pass
 
