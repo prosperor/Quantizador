@@ -16,8 +16,10 @@ __status__ = "Desenvolvimento"
 class ProblemaLocal():
     """Classe abstrata com interfaces para implementacao de busca local"""
     
-    def __init__(self, s):
-        self.estado_inicial = s
+    def __init__(self, quantidadeCores, pixeis):
+        self.paleta = self.gerarPaletaAleatoria(quantidadeCores)
+        self.pixeis = pixeis
+        self.h = self.heuristica(pixeis, self.paleta)
     
     @staticmethod
     def heuristica(original, paleta):
@@ -34,6 +36,14 @@ class ProblemaLocal():
         paleta = []
         for i in range(quantidadeCores):
             paleta.append(tuple(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
+
+    
+    def getPatela(self):
+        return self.paleta
+
+    def getHeuristica(self):
+        return self.h
+
 
     
     def acoes(self, s):
