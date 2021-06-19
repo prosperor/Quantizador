@@ -1,14 +1,10 @@
+#!/usr/bin/env python3
 
-<<<<<<< Updated upstream
 """Quantificador de cores de imagens utilizando algoritmos de busca local"""
 
 import sys
 from App import buscas
 from App.problemas import ProblemaQuantificacao, ProblemaLocal
-=======
-import buscas
-from problemas import ProblemaQuantificacao
->>>>>>> Stashed changes
 from PIL import Image
 
 __author__ = "Nome do aluno"
@@ -22,6 +18,17 @@ __status__ = "Desenvolvimento"
 
 
 def quantificar_subida_encosta(**kwargs):
+
+    no_atual = estado_inicial
+    filhos = no_atual.pegarValor(1)
+
+    while(True):
+        no_vizinho = max(filhos)
+        if no_vizinho.pegarValor(2) <= no_atual.pegarValor(2):
+            return no_atual
+        no_atual = no_vizinho
+        
+
     """
     Funcao que inicializa estruturas de dados e invoca algoritmo de busca local
     por subida de encosta.
@@ -41,10 +48,11 @@ def quantificar_feixe_local(**kwargs):
 
 def quantificar_geneticamente(**kwargs):
     popInit = [] #população inicial declarada como vazia, a variavel argumento irá definir o tamanho da população
+
     for i in range(argumento):
-        popInit.append(ProblemaLocal.gerarPaletaAleatoria(cores)) #enche a população com paletas aleatorias onde o numero de cores é definido pela variavel cores
+        popInit.append(ProblemaLocal(cores, pixels).getPaleta()) #enche a população com paletas aleatorias onde o numero de cores é definido pela variavel cores
     
-    res = buscas.busca_genetica(popInit, int("".join(filter(str.isdigit, input("Informe a quantidade de gerações: "))))) #inicia a busca genetica pela paleta
+    res = buscas.busca_genetica(popInit, ProblemaLocal.heuristica) #inicia a busca genetica pela paleta
 
     #precisa aplicar a paleta a imagem apos obter resposta
 
@@ -59,13 +67,14 @@ def quantificar_geneticamente(**kwargs):
     
 
 if __name__ == "__main__":
+
     print("Olá meu caro mansebo, vamos dar os argumentos para o funcionamento do nosso quantizador")
     print("Digite o nome do algoritimo desejado")
     algoritmo = input("SUBIDA | FEIXE | GENÉTICO" + '\n').lower()
     argumento = input("Digite o argumento que acompanha o algoritimo" + '\n')
     cores = int(input("Quantidade de cores"  + '\n'))
     nome_arquivo = input("Caminho e nome do arquivo com a imagem a ser processada"  + '\n' )
-
+    # Define algoritmo a ser aplicado
     if algoritmo == "subida":
         algoritmo = quantificar_subida_encosta
     elif algoritmo == "feixe":
@@ -77,23 +86,21 @@ if __name__ == "__main__":
         print("Algoritmos válidos são: {0}, {1}, {2}"
               .format("subida", "feixe", "genetico"))
         exit()
-
+    #Verifica o numero de cores
     if cores < 1:
         print("Quantidade de cores pós-quantizacão deve ser no mínimo 1.")
         exit()
-
+    # Abrir a imagem especificada
     try:
         original = Image.open(nome_arquivo)
     except IOError as err:
         print("Erro ao acessar arquivo: {0}".format(err))
-   
+    # Copiar imagem para poder comparar ambas ao final.    
     reduzida = original.copy()
-
     # Obtendo acesso aos pixels da cópia. Cada posicao é uma tupla (R, G, B)
     # R, G e B tem domínio em [0,255], ou seja, 0 <= x <= 255
-    
     pixels = reduzida.load()
-    print(pixels[2,2])
+    
 
     algoritmo(argumento=argumento, cores=cores, pixels=pixels) #esses argumentos vao entrar com esses nomes nos algoritmos
     
@@ -102,3 +109,6 @@ if __name__ == "__main__":
     reduzida.save(nome_arquivo.split(".")[0] + ".png")
     
     exit()
+
+else:
+    raise ImportError("Este módulo só pode funcionar como o principal.")

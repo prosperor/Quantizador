@@ -57,9 +57,24 @@ def busca_genetica(populacao, fn_fitness):
 
         ng = random.choices(populacao, peso, k=len(populacao))
 
-        for i in range(0, len(ng), 2):
-            pos = random.randint(1, len(ng[i])-2)
 
+
+        for i in range(0, len(ng), 2):
+            pos = random.randint(1, len(ng[i])-1)
+            for j in range(0, pos):
+                ng[i,j], ng[i+1,j] = ng[i+1,j], ng[i,j]
+
+
+        alpha = 0.15
+        for i in ng:
+            for j in i:
+                if(random.random() <= alpha):
+                    j = tuple(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+    
+        populacao = ng
+
+    populacao.sort(key=lambda x: fn_fitness(individuo))
+    return populacao[0]
 
 
 
