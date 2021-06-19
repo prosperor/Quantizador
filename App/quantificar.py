@@ -55,13 +55,13 @@ def quantificar_geneticamente(**kwargs):
     
     res = buscas.busca_genetica(popInit, ProblemaLocal.heuristica) #inicia a busca genetica pela paleta
 
-    for i in pixels:
-        for j in i:
-            mc = res[0]
-            for cor in res:
-                if(distance.euclidean(j,cor) < distance.euclidean(j,mc)):
+    for i in range(tamanhoImg[0]):
+        for j in range(tamanhoImg[1]):
+            mc = res.paleta[0]
+            for cor in res.paleta:
+                if(distance.euclidean(pixels[i,j],mc) < distance.euclidean(pixels[i,j],cor)):
                     mc = cor
-            j = mc
+            pixels[i,j] = mc
 
     #precisa aplicar a paleta a imagem apos obter resposta
 
@@ -72,7 +72,7 @@ def quantificar_geneticamente(**kwargs):
     """
     ### Após iniciar estruturas de dados, remova o comentario da linha abaixo
     #buscas.busca_genetica(populacao, fitness)
-    raise NotImplementedError
+    
     
 
 if __name__ == "__main__":

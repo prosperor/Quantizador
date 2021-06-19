@@ -40,8 +40,8 @@ def busca_genetica(populacao, fn_fitness):
     :param fn_fitness: funcao capaz de avaliar a qualidade de um individuo
     :return: um individuo com a funcao_fitness desejada
     """    
-
-    for cont in range(20):
+    ngen = int(input("informe quantas gerações deseja: "))
+    for cont in range(ngen):
         print(f"geração: {cont}")
         fitness = []
         peso = []
@@ -62,20 +62,20 @@ def busca_genetica(populacao, fn_fitness):
                 ng[i].paleta[j], ng[i+1].paleta[j] = ng[i+1].paleta[j], ng[i].paleta[j]
         
             #print(f"póscrusamento: {i.paleta}")
-        alpha = 0.15
+        alpha = 0.1
         for i in ng:
-            print(i.paleta)
+            #print(i.paleta)
             for j in range(len(i.paleta)):
                 rng = random.random()
-                print(rng)
+                #print(rng)
                 if(rng <= alpha):
                     i.aplicarMutacao(j, tuple([random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)]))
-            print(i.paleta)
+            #print(i.paleta)
     
         populacao = ng
         
 
-    populacao.sort(key=lambda x: fn_fitness(individuo))
+    populacao.sort(key=lambda x: fn_fitness(individuo, individuo.getPaleta()))
     return populacao[0]
 
 
