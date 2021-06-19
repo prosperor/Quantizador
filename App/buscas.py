@@ -41,30 +41,47 @@ def busca_genetica(populacao, fn_fitness):
     :return: um individuo com a funcao_fitness desejada
     """    
 
-
-    
-
-    for cont in range(30):
-
+    for cont in range(20):
+        print(f"geração: {cont}")
         fitness = []
         peso = []
         for individuo in populacao:
-            fitness.append(fn_fitness(individuo))
+            fitness.append(fn_fitness(individuo, individuo.getPaleta()))
+            
         
         fitnessGeral = sum(fitness)
         for fit in fitness:
             peso.append( fitnessGeral/fit)
 
         ng = random.choices(populacao, peso, k=len(populacao))
-
+        
+            #print(f"pósseleção: {i.paleta}")
         for i in range(0, len(ng), 2):
-            pos = random.randint(1, len(ng[i])-2)
+            pos = random.randint(1, len(ng[i].getPaleta())-1)
+            for j in range(0, pos):
+                ng[i].paleta[j], ng[i+1].paleta[j] = ng[i+1].paleta[j], ng[i].paleta[j]
+        
+            #print(f"póscrusamento: {i.paleta}")
+        alpha = 0.15
+        for i in ng:
+            print(i.paleta)
+            for j in range(len(i.paleta)):
+                rng = random.random()
+                print(rng)
+                if(rng <= alpha):
+                    i.aplicarMutacao(j, tuple([random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)]))
+            print(i.paleta)
+    
+        populacao = ng
+        
+
+    populacao.sort(key=lambda x: fn_fitness(individuo))
+    return populacao[0]
 
 
 
 
-
-    raise NotImplementedError
+    
 
 if __name__ == "__main__":
     print("Este módulo não deve ser utilizado como o principal ou inicial")

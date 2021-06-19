@@ -16,29 +16,39 @@ __status__ = "Desenvolvimento"
 class ProblemaLocal():
     """Classe abstrata com interfaces para implementacao de busca local"""
     
-    def __init__(self, quantidadeCores, pixeis):
+    def __init__(self, quantidadeCores, pixeis, tamanho):
         self.paleta = self.gerarPaletaAleatoria(quantidadeCores)
         self.pixeis = pixeis
-        self.h = self.heuristica(pixeis, self.paleta)
+        self.alt, self.lar = tamanho
+         
+        
+        self.h = self.heuristica(self.paleta)
     
-    @staticmethod
-    def heuristica(original, paleta):
+    
+    def heuristica(self, paleta):
         h = 0
         for p in paleta:
-            for i in original:
-                for j in i:
-                    h += distance.euclidean(p, j)
+            for i in range(self.alt):
+                for j in range(self.lar):
+                    h += distance.euclidean(p, self.pixeis[i,j])
+        
+        h /= self.alt*self.lar
         
         return h
+
+    def aplicarMutacao(self, posicao, novaCor):
+        self.paleta[posicao] = novaCor
 
     @staticmethod
     def gerarPaletaAleatoria(quantidadeCores):
         paleta = []
         for i in range(quantidadeCores):
-            paleta.append(tuple(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
+            cor = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+            paleta.append(cor)
+        return paleta
 
     
-    def getPatela(self):
+    def getPaleta(self):
         return self.paleta
 
     def getHeuristica(self):

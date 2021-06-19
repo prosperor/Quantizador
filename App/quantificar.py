@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 """Quantificador de cores de imagens utilizando algoritmos de busca local"""
-
+from scipy.spatial import distance
 import sys
-from App import buscas
-from App.problemas import ProblemaQuantificacao, ProblemaLocal
+import buscas
+from problemas import ProblemaQuantificacao, ProblemaLocal
 from PIL import Image
 
 __author__ = "Nome do aluno"
@@ -48,10 +48,20 @@ def quantificar_feixe_local(**kwargs):
 
 def quantificar_geneticamente(**kwargs):
     popInit = [] #população inicial declarada como vazia, a variavel argumento irá definir o tamanho da população
-    for i in range(argumento):
-        popInit.append(ProblemaLocal.gerarPaletaAleatoria(cores)) #enche a população com paletas aleatorias onde o numero de cores é definido pela variavel cores
+
+    for i in range(int(argumento)):
+        print(i)
+        popInit.append(ProblemaLocal(cores, pixels, tamanhoImg)) #enche a população com paletas aleatorias onde o numero de cores é definido pela variavel cores
     
-    res = buscas.busca_genetica(popInit, int("".join(filter(str.isdigit, input("Informe a quantidade de gerações: "))))) #inicia a busca genetica pela paleta
+    res = buscas.busca_genetica(popInit, ProblemaLocal.heuristica) #inicia a busca genetica pela paleta
+
+    for i in pixels:
+        for j in i:
+            mc = res[0]
+            for cor in res:
+                if(distance.euclidean(j,cor) < distance.euclidean(j,mc)):
+                    mc = cor
+            j = mc
 
     #precisa aplicar a paleta a imagem apos obter resposta
 
@@ -92,6 +102,7 @@ if __name__ == "__main__":
     # Abrir a imagem especificada
     try:
         original = Image.open(nome_arquivo)
+        tamanhoImg = original.size
     except IOError as err:
         print("Erro ao acessar arquivo: {0}".format(err))
     # Copiar imagem para poder comparar ambas ao final.    
@@ -99,8 +110,10 @@ if __name__ == "__main__":
     # Obtendo acesso aos pixels da cópia. Cada posicao é uma tupla (R, G, B)
     # R, G e B tem domínio em [0,255], ou seja, 0 <= x <= 255
     pixels = reduzida.load()
+    
+    
 
-    algoritmo(argumento=argumento, cores=cores, pixels=pixels) #esses argumentos vao entrar com esses nomes nos algoritmos
+    algoritmo(argumento=argumento, cores=cores, pixels=pixels, tamanhoImg=tamanhoImg) #esses argumentos vao entrar com esses nomes nos algoritmos
     
     original.show()
     reduzida.show()
