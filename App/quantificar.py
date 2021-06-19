@@ -2,8 +2,9 @@
 
 """Quantificador de cores de imagens utilizando algoritmos de busca local"""
 
-import sys, buscas
-from problemas import ProblemaQuantificacao
+import sys
+from App import buscas
+from App.problemas import ProblemaQuantificacao, ProblemaLocal
 from PIL import Image
 
 __author__ = "Nome do aluno"
@@ -46,6 +47,15 @@ def quantificar_feixe_local(**kwargs):
     raise NotImplementedError
 
 def quantificar_geneticamente(**kwargs):
+    popInit = [] #população inicial declarada como vazia, a variavel argumento irá definir o tamanho da população
+    for i in range(argumento):
+        popInit.append(ProblemaLocal.gerarPaletaAleatoria(cores)) #enche a população com paletas aleatorias onde o numero de cores é definido pela variavel cores
+    
+    res = buscas.busca_genetica(popInit, int("".join(filter(str.isdigit, input("Informe a quantidade de gerações: "))))) #inicia a busca genetica pela paleta
+
+    #precisa aplicar a paleta a imagem apos obter resposta
+
+
     """
     Funcao que inicializa estruturas de dados e invoca algoritmo de busca local
     por por algoritmo genético.
@@ -90,7 +100,7 @@ if __name__ == "__main__":
     # R, G e B tem domínio em [0,255], ou seja, 0 <= x <= 255
     pixels = reduzida.load()
 
-    algoritmo(argumento=argumento, cores=cores, pixels=pixels)
+    algoritmo(argumento=argumento, cores=cores, pixels=pixels) #esses argumentos vao entrar com esses nomes nos algoritmos
     
     original.show()
     reduzida.show()

@@ -30,7 +30,7 @@ def feixe_local(problema, k=8):
     """
     raise NotImplementedError
 
-def busca_genetica(populacao, fn_fitness):
+def busca_genetica(populacao, nGeracoes):
     """
     Busca local por algoritmo genético.
     

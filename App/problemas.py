@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-
+from scipy.spatial import distance
+import random
 """Módulo com implementacao da modelagem do problema abordado"""
 
 __author__ = "Nome do aluno"
@@ -18,8 +19,22 @@ class ProblemaLocal():
     def __init__(self, s):
         self.estado_inicial = s
     
-    def heuristica(self, s):
-        raise NotImplementedError()
+    @staticmethod
+    def heuristica(original, paleta):
+        h = 0
+        for p in paleta:
+            for i in original:
+                for j in i:
+                    h += distance.euclidean(p, j)
+        
+        return h
+
+    @staticmethod
+    def gerarPaletaAleatoria(quantidadeCores):
+        paleta = []
+        for i in range(quantidadeCores):
+            paleta.append(tuple(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
+
     
     def acoes(self, s):
         raise NotImplementedError()
@@ -31,6 +46,8 @@ class ProblemaLocal():
 class ProblemaQuantificacao(ProblemaLocal):
     """Aqui você implementará a modelagem da busca local em quantizacao de
     imagens"""
+
+    
     pass
 
 
