@@ -69,7 +69,7 @@ def busca_genetica(populacao, fn_fitness):
                 rng = random.random()
                 #print(rng)
                 if(rng <= alpha):
-                    i.aplicarMutacao(j, tuple([random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)]))
+                    i.aplicarMutacao(j, i.gerarCorAleatoria())
             #print(i.paleta)
     
         populacao = ng

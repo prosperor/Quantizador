@@ -54,7 +54,7 @@ def quantificar_geneticamente(**kwargs):
         popInit.append(ProblemaLocal(cores, pixels, tamanhoImg)) #enche a população com paletas aleatorias onde o numero de cores é definido pela variavel cores
     
     res = buscas.busca_genetica(popInit, ProblemaLocal.heuristica) #inicia a busca genetica pela paleta
-
+    print(res)
     for i in range(tamanhoImg[0]):
         for j in range(tamanhoImg[1]):
             #mc = res.paleta[0]

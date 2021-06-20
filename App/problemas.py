@@ -17,10 +17,11 @@ class ProblemaLocal():
     """Classe abstrata com interfaces para implementacao de busca local"""
     
     def __init__(self, quantidadeCores, pixeis, tamanho):
-        self.paleta = self.gerarPaletaAleatoria(quantidadeCores)
         self.pixeis = pixeis
         self.alt, self.lar = tamanho
-         
+        
+        self.paleta = self.gerarPaletaAleatoria(quantidadeCores)
+        print(self.paleta)
         
         self.h = self.heuristica(self.paleta)
     
@@ -39,11 +40,20 @@ class ProblemaLocal():
     def aplicarMutacao(self, posicao, novaCor):
         self.paleta[posicao] = novaCor
 
-    @staticmethod
-    def gerarPaletaAleatoria(quantidadeCores):
+    def gerarCorAleatoria(self):
+        novacor = -1
+        while(novacor in self.paleta or novacor == -1):
+            ht, wt = random.randint(0,self.alt-1),random.randint(0,self.lar-1)
+            novacor = self.pixeis[ht,wt]
+        return (novacor)
+
+    
+    def gerarPaletaAleatoria(self, quantidadeCores):
         paleta = []
         for i in range(quantidadeCores):
-            cor = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+            cor = self.pixeis[random.randint(0,self.alt-1),
+            random.randint(0,self.lar-1)]
+            #cor = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
             paleta.append(cor)
         return paleta
 
