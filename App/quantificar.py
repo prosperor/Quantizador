@@ -6,6 +6,7 @@ import sys
 import buscas
 from problemas import ProblemaQuantificacao, ProblemaLocal
 from PIL import Image
+from sklearn.cluster import KMeans
 
 __author__ = "Nome do aluno"
 __copyright__ = "Copyleft"
@@ -54,26 +55,32 @@ def quantificar_geneticamente(**kwargs):
         popInit.append(ProblemaLocal(cores, pixels, tamanhoImg)) #enche a população com paletas aleatorias onde o numero de cores é definido pela variavel cores
     
     res = buscas.busca_genetica(popInit, ProblemaLocal.heuristica) #inicia a busca genetica pela paleta
-    print(res)
+    
     for i in range(tamanhoImg[0]):
         for j in range(tamanhoImg[1]):
-            #mc = res.paleta[0]
 
             pixels[i,j] = getBest(res.paleta, pixels[i,j])
-            '''for cor in res.paleta:
-                if(distance.euclidean(pixels[i,j],mc) < distance.euclidean(pixels[i,j],cor)):
-                    mc = cor'''
-            #pixels[i,j] = mc
+            
 
-    #precisa aplicar a paleta a imagem apos obter resposta
+def quantificar_k_medias(**kwargs):
+    kmed = KMeans(n_clusters = int(argumento))
 
+    cor = []
+    for i in range(tamanhoImg[0]):
+        for j in range(tamanhoImg[1]):
+            cor.append(pixels[i,j])
 
-    """
-    Funcao que inicializa estruturas de dados e invoca algoritmo de busca local
-    por por algoritmo genético.
-    """
-    ### Após iniciar estruturas de dados, remova o comentario da linha abaixo
-    #buscas.busca_genetica(populacao, fitness)
+    kmed.fit(cor)
+    paleta = kmed.cluster_centers_.astype(int)
+
+    lab = kmed.labels_
+
+    for i in range(tamanhoImg[0]):
+        for j in range(tamanhoImg[1]):
+
+            pixels[i,j] = tuple(getBest(paleta, pixels[i,j]))
+
+    
     
 def getBest(paleta, pixel):
     best = []
@@ -87,7 +94,7 @@ if __name__ == "__main__":
 
     print("Olá meu caro mansebo, vamos dar os argumentos para o funcionamento do nosso quantizador")
     print("Digite o nome do algoritimo desejado")
-    algoritmo = input("SUBIDA | FEIXE | GENÉTICO" + '\n').lower()
+    algoritmo = input("SUBIDA | FEIXE | GENETICO | KMEDIAS" + '\n').lower()
     argumento = input("Digite o argumento que acompanha o algoritimo" + '\n')
     cores = int(input("Quantidade de cores"  + '\n'))
     nome_arquivo = input("Caminho e nome do arquivo com a imagem a ser processada"  + '\n' )
@@ -98,6 +105,8 @@ if __name__ == "__main__":
         algoritmo = quantificar_feixe_local
     elif algoritmo == "genetico":
         algoritmo = quantificar_geneticamente
+    elif algoritmo == "kmedias":
+        algoritmo = quantificar_k_medias
     else:
         print("Algoritmo especificado inválido: {0}".format(algoritmo))
         print("Algoritmos válidos são: {0}, {1}, {2}"
