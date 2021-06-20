@@ -78,7 +78,7 @@ def quantificar_geneticamente(**kwargs):
 def getBest(paleta, pixel):
     best = []
     for i in range(len(paleta)):
-        if (len(best) == 0 or best[1] < distance.euclidean(paleta[i],pixel)):
+        if (len(best) == 0 or best[1] > distance.euclidean(paleta[i],pixel)):
             best = [paleta[i], distance.euclidean(paleta[i],pixel)]
 
     return best[0]

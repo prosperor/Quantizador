@@ -51,7 +51,7 @@ def busca_genetica(populacao, fn_fitness):
         
         fitnessGeral = sum(fitness)
         for fit in fitness:
-            peso.append( fitnessGeral/fit)
+            peso.append( fit/fitnessGeral)
 
         ng = random.choices(populacao, peso, k=len(populacao))
         
