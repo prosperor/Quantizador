@@ -1,37 +1,39 @@
 import random
 
-
 def subida_encosta(problema, estado):
-    cont = 0
-    avaliacoes = list()
-    stop = 0
-
     while True:
-        atual, filhos = problema.avaliacao(estado), problema.getFilhos(estado)
+        atual = problema.avaliacao(estado)
+        filhos = problema.getFilhos(estado)
         melhor = atual
         estado_atual = problema.estado
-        avaliacoes.append(atual)
+
         for filho in filhos:
             avaliacao = problema.avaliacao(filho)
             if avaliacao <= melhor:
-                stop += 1 if avaliacao == melhor else 0
                 melhor = avaliacao
                 estado = filho
-        cont += 1
-        if melhor == atual and estado_atual == estado or stop == 20:
+
+        if (melhor == atual and estado_atual == estado):
             break
-    return estado, avaliacoes
+
+    return estado
 
 
-def feixe_local(problema, k=8):
-    """
-    Busca por feixe local.
+def feixe_local(problema, k):
+    kAtuais = problema.gerar_iniciais(k)
 
-    :param problema: objeto da classe ProblemaLocal
-    :param k: quantidade de estados a passarem de uma geracão à outra
-    :return: estado final de um pico do problema (global ou local).
-    """
-    raise NotImplementedError
+    while True:
+        filhos = list()
+        for k_ in kAtuais:
+            filhos += list(problema.getFilhos(k_))
+        
+        filhos = sorted(key=lambda estado: problema.avaliacao(estado))
+
+        if problema.avaliacao(filhos[0]) > problema.avaliacao(kAtuais[0]):
+            kAtuais = filhos[:k]
+        else:
+            return kAtuais[0]
+
 
 
 def busca_genetica(populacao, fn_fitness):

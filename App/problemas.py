@@ -1,6 +1,6 @@
 from math import sqrt
 import random
-from copy import deepcopy
+from copy import deepcopy, copy
 from scipy.spatial import distance
 
 
@@ -56,7 +56,7 @@ class ProblemaQuantificacao(ProblemaLocal):
         for _ in range(i):
             paleta = list()
             for _ in range(self.cores):
-                paleta.append(tuple(random.randint(0, 255),
+                paleta.append((random.randint(0, 255),
                               random.randint(0, 255), random.randint(0, 255)))
             estados.append(paleta)
         return estados
@@ -64,8 +64,7 @@ class ProblemaQuantificacao(ProblemaLocal):
     def est(self):
         cores_p = list()
         for _ in range(self.cores):
-            cores_p.append(tuple(random.randint(0, 255),
-                           random.randint(0, 255), random.randint(0, 255)))
+            cores_p.append((random.randint(0, 255),random.randint(0, 255), random.randint(0, 255)))
         return cores_p
 
     def getFilhos(self, estado):
@@ -79,7 +78,7 @@ class ProblemaQuantificacao(ProblemaLocal):
                 nova_tupla = tuple(lista_tupla)
                 novoFilho[i] = nova_tupla
                 filhos.append(novoFilho)
-                novoFilho = deepcopy(estado)
+                novoFilho = copy(estado)
 
             for j in range(len(tupla)):
                 lista_tupla = list(tupla)
@@ -87,7 +86,7 @@ class ProblemaQuantificacao(ProblemaLocal):
                 nova_tupla = tuple(lista_tupla)
                 novoFilho[i] = nova_tupla
                 filhos.append(novoFilho)
-                novoFilho = deepcopy(estado)
+                novoFilho = copy(estado)
         return filhos
 
     def avaliaCor(self, pixel, cor):
@@ -99,7 +98,7 @@ class ProblemaQuantificacao(ProblemaLocal):
         dist = 0
         for cor in estado:
             for i in range(self.largura):
-                for h in range(self.altura):
+                for h in range(self.altura):    
                     pixel = self.pixels[i, h]
                     distB = sqrt(
                         (pixel[0] - cor[0]) ** 2 + (pixel[1] - cor[1]) ** 2 + (pixel[2] - cor[2]) ** 2

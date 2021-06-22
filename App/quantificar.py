@@ -2,9 +2,9 @@ import buscas
 from problemas import ProblemaLocal, ProblemaQuantificacao
 from PIL import Image
 
-def quantificar_subida_encosta(**kwargs):
+def quantificar_subida_encosta(argumento,cores,pixels,largura,altura,**args):
     prob = ProblemaQuantificacao(cores,pixels,altura,largura)
-    estado = buscas.subida_encosta(prob,prob.estado)[0]
+    estado = buscas.subida_encosta(prob,prob.estado)
 
     for i in range(largura):
         for j in range(altura):
@@ -18,13 +18,19 @@ def quantificar_subida_encosta(**kwargs):
 
 
 def quantificar_feixe_local(**kwargs):
-    """
-    Funcao que inicializa estruturas de dados e invoca algoritmo de busca em
-    feixe local.
-    """
-    ### Após iniciar estruturas de dados, remova o comentario da linha abaixo
-    #buscas.feixe_local(problema, k)
-    raise NotImplementedError
+    k = int(argumento)
+    prob = ProblemaQuantificacao(cores, pixels, largura, altura)   
+    estado = buscas.feixe_local(prob, k)
+
+    for i in range(largura):
+        for j in range(altura):
+            pixel = pixels[i,j]
+            melhor = estado[0]
+            for cor in estado:
+                if prob.avaliaCor(pixel, cor) < prob.avaliaCor(pixel, melhor):
+                    melhor = cor
+            
+            pixels[i,j] = melhor
 
 def quantificar_geneticamente(**kwargs):
     popInit = [] #população inicial declarada como vazia, a variavel argumento irá definir o tamanho da população
@@ -56,11 +62,11 @@ if __name__ == "__main__":
     nome_arquivo = input("Caminho e nome do arquivo com a imagem a ser processada"  + '\n' )
 
     if algoritmo == "subida":
-        algoritmo = quantificar_subida_encosta()
+        algoritmo = quantificar_subida_encosta
     elif algoritmo == "feixe":
-        algoritmo = quantificar_feixe_local()
+        algoritmo = quantificar_feixe_local
     elif algoritmo == "genetico":
-        algoritmo = quantificar_geneticamente()
+        algoritmo = quantificar_geneticamente
     else:
         print("Algoritmo especificado inválido: {0}".format(algoritmo))
         print("Algoritmos válidos são: {0}, {1}, {2}"
@@ -78,9 +84,8 @@ if __name__ == "__main__":
 
     reduzida = original.copy()
     pixels = reduzida.load()
-    largura, altura = reduzida.size()
+    largura, altura = reduzida.size
     
-
     algoritmo(argumento=argumento, cores=cores, pixels=pixels, largura=largura, altura=altura) 
     
     original.show()
